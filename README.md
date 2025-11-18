@@ -141,8 +141,13 @@ You should see:
 
 [admin] Admin server running at http://127.0.0.1:8081/
 [proxy] Listening on 127.0.0.1:8888 ...
-
+```
+## Use this command to get http requests in your powershell
+```
+Invoke-WebRequest -Proxy "http://127.0.0.1:8888" -Uri "http://example.com/" -UseBasicParsing
+```
 ## 🌐 Configuring Browser to Use Proxy
+```
 Windows (Chrome / Edge / System)
 
 Open Windows Proxy Settings
@@ -300,4 +305,5 @@ Divyansh Chauhan
 Operating System PBL Project
 
 Multithreaded Proxy Server (Python)#
+
 
