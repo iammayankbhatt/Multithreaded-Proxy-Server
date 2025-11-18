@@ -1,0 +1,6 @@
+# Simple ad domains sample (not exhaustive)
+ads.google.com
+doubleclick.net
+adservice.google.com
+ads.yahoo.com
+.adserver.com
