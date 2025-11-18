@@ -1,29 +1,31 @@
 ## 🚀 Multithreaded Proxy Web Server
-<div align="center"> <h3>Operating System Mini Project – Caching • Filtering • Ad-Blocking • Admin UI</h3> <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white; margin: 20px 0;"> <p><strong>A high-performance proxy server with advanced features</strong></p> </div> </div>
-📋 Project Overview
-This project implements a Multithreaded HTTP Proxy Server with comprehensive features including:
 
-🔄 Thread Pooling
+Operating System Mini Project – Caching • Filtering • Ad-Blocking • Admin UI
 
-💾 LRU Caching
+This project implements a Multithreaded HTTP Proxy Server with:
+```
+Thread Pooling
 
-🚫 Domain Blocking
+LRU Caching
 
-📺 Ad-Blocking
+Domain Blocking
 
-🔒 HTTP/HTTPS Support (CONNECT tunneling)
+Ad-Blocking
 
-🖥️ Admin Web Dashboard
+HTTP/HTTPS Support (CONNECT tunneling)
+
+Admin Web Dashboard
 
 This proxy sits between a client (browser) and the internet, filtering/caching requests while providing an admin interface to control behavior in real-time.
+```
+## ⭐ Key Features
+```
+✔ 1. Multithreaded Proxy
 
-⭐ Key Features
-✅ 1. Multithreaded Proxy
-Handles multiple clients simultaneously using ThreadPoolExecutor
+Handles multiple clients simultaneously using ThreadPoolExecutor.
 
-Efficient resource utilization
+✔ 2. Thread-Safe LRU Cache
 
-✅ 2. Thread-Safe LRU Cache
 Stores frequently accessed HTTP responses
 
 Reduces bandwidth and improves speed
@@ -32,24 +34,33 @@ Honors HTTP rules (Cache-Control, no-store, max-age, vary headers)
 
 Prevents caching huge responses (limit: 5 MB)
 
-✅ 3. Domain Blocking
-Block any website/domain via the Admin Panel
+✔ 3. Domain Blocking
 
-Proxy instantly denies the request with 403 Forbidden
+Block any website/domain via the Admin Panel, e.g.:
 
-✅ 4. HTTPS Ad-Blocking (without MITM)
-Even though HTTPS traffic is encrypted, ad domains can still be blocked by intercepting the CONNECT method
+example.com
 
-Normal HTTPS websites load ✓
 
-HTTPS ads fail to connect → ads disappear ✓
+Proxy instantly denies the request with 403 Forbidden.
 
-No certificate installation or MITM required ✓
+✔ 4. HTTPS Ad-Blocking (without MITM)
 
-✅ 5. Admin Web Dashboard
-Available at: http://127.0.0.1:8081/
+Even though HTTPS traffic is encrypted, ad domains can still be blocked by intercepting the CONNECT method.
 
-Features:
+This means:
+
+✔ Normal HTTPS websites load
+✔ But HTTPS ads fail to connect → ads disappear
+✔ No certificate installation or MITM required
+
+✔ 5. Admin Web Dashboard
+
+Available at:
+
+http://127.0.0.1:8081/
+
+
+Allows:
 
 View cache statistics
 
@@ -61,8 +72,9 @@ Clear cache
 
 Live status monitoring
 
-✅ 6. Real-Time Logging
-Proxy prints comprehensive logs including:
+✔ 6. Real-Time Logging
+
+Proxy prints:
 
 Incoming requests
 
@@ -73,69 +85,65 @@ Blocked domains
 CONNECT requests
 
 Upstream/downstream headers (debug)
-
+```
 ## 🧱 Project Architecture
-
-<div style="background: #f5f5f5; padding: 20px; border-radius: 8px; font-family: monospace;">
-  <div style="text-align: center;">
-    ┌────────────────────────┐        ┌────────────────────────┐<br>
-    │         Client         │        │       Admin Panel       │<br>
-    │  Browser / Curl / App  │        │  http://127.0.0.1:8081  │<br>
-    └───────────┬────────────┘        └──────────────┬─────────┘<br>
-                │                                     │<br>
-                ▼                                     │<br>
-          ┌──────────────┐     Admin Commands         │<br>
-          │ Proxy Server │ &lt;──────────────────────────┘<br>
-          │  ThreadPool  │<br>
-          └───────┬──────┘<br>
-                  │<br>
-                  ▼<br>
-         ┌──────────────────┐<br>
-         │ Filtering Engine │  Blocked / Ad domains<br>
-         └──────────────────┘<br>
-                  │<br>
-                  ▼<br>
-           ┌────────────┐<br>
-           │   Cache     │  (LRU, TTL)<br>
-           └────────────┘<br>
-                  │<br>
-                  ▼<br>
-           ┌────────────┐<br>
-           │ Origin Web │<br>
-           │   Server   │<br>
-           └────────────┘<br>
-  </div>
-</div>
+<pre>
+┌────────────────────────┐        ┌────────────────────────┐
+│         Client         │        │       Admin Panel       │
+│  Browser / Curl / App  │        │  http://127.0.0.1:8081  │
+└───────────┬────────────┘        └──────────────┬─────────┘
+            │                                     │
+            ▼                                     │
+      ┌──────────────┐     Admin Commands         │
+      │ Proxy Server │ <──────────────────────────┘
+      │  ThreadPool  │
+      └───────┬──────┘
+              │
+              ▼
+     ┌──────────────────┐
+     │ Filtering Engine │  Blocked / Ad domains
+     └──────────────────┘
+              │
+              ▼
+       ┌────────────┐
+       │   Cache     │  (LRU, TTL)
+       └────────────┘
+              │
+              ▼
+       ┌────────────┐
+       │ Origin Web │
+       │   Server   │
+       └────────────┘
+</pre>
 ## 📦 Folder Structure
+project/
+│
+├── server.py               # Main proxy server
+├── admin_server.py         # Dashboard
+├── cache.py                # LRU Cache implementation
+├── filter_engine.py        # Blocked + Ad domain logic
+│
+└── data/
+    ├── blocked_domains.txt
+    └── ad_domains.txt
 
-<div style="background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; font-family: 'Courier New', monospace;">
-project/<br>
-│<br>
-├── <span style="color: #61afef;">server.py</span>               # Main proxy server<br>
-├── <span style="color: #61afef;">admin_server.py</span>         # Dashboard<br>
-├── <span style="color: #61afef;">cache.py</span>                # LRU Cache implementation<br>
-├── <span style="color: #61afef;">filter_engine.py</span>        # Blocked + Ad domain logic<br>
-│<br>
-└── <span style="color: #98c379;">data/</span><br>
-    ├── blocked_domains.txt<br>
-    └── ad_domains.txt<br>
-</div>
 ## ▶️ Running the Project
+```
 1. Install dependencies (Python 3.x)
-bash
 pip install flask
+
 2. Run the proxy server
-bash
 python server.py
+
+
 You should see:
 
-html
-<div style="background: #e8f5e8; padding: 10px; border-left: 4px solid #4caf50; margin: 10px 0;">
-[admin] Admin server running at http://127.0.0.1:8081/<br>
+[admin] Admin server running at http://127.0.0.1:8081/
 [proxy] Listening on 127.0.0.1:8888 ...
-</div>
+
 ## 🌐 Configuring Browser to Use Proxy
 Windows (Chrome / Edge / System)
+
 Open Windows Proxy Settings
 
 Turn ON: Use a proxy server
@@ -146,129 +154,148 @@ Address: 127.0.0.1
 
 Port: 8888
 
-Save
+Save.
 
 Firefox (independent proxy config)
 Settings → Network → Manual Proxy
-
 HTTP Proxy: 127.0.0.1
-
 Port: 8888
-
 Check: Use proxy for all protocols
 
-Now all HTTP/HTTPS traffic goes through your proxy.
 
-🛠️ Admin Panel Usage
-Visit: http://127.0.0.1:8081/
+Now all HTTP/HTTPS traffic goes through your proxy.
+```
+## 🛠️ Admin Panel Usage
+```
+Visit:
+
+http://127.0.0.1:8081/
 
 Features:
 
-✅ Add blocked domains
-
-✅ Add ad-block domains
-
-✅ Clear cache
-
-✅ See cache size + entries
-
-✅ Status page
-
+✔ Add blocked domains
+✔ Add ad-block domains
+✔ Clear cache
+✔ See cache size + entries
+✔ Status page
+```
 ## 🎯 Demo Scenarios (For Viva Presentation)
+```
 1. HTTP Caching Demo
 Step 1
-Visit: http://example.com
+
+Visit:
+
+http://example.com
+
+
 Logs:
 
-text
 [cache] MISS GET example.com:80 /
+
 Step 2
+
 Refresh the page
+
 Logs:
 
-text
 [cache] HIT GET example.com:80 /
-✅ Shows caching is working
+
+
+✔ Shows caching is working
 
 2. Domain Blocking Demo
 Step 1
+
 Open Admin Panel → Blocked Domains → Add:
 
-text
 example.com
+
 Step 2
-Again visit: http://example.com/
+
+Again visit:
+
+http://example.com/
+
+
 Output:
 
-text
 403 Forbidden
+
+
 Logs:
 
-text
 [proxy] BLOCKED example.com
-✅ Domain blocking works
+
+
+✔ Domain blocking works
 
 3. Ad-Blocking Demo (BEST SHOWCASE)
 Step 1 — Add real ad domains
+
 In Admin Panel → Add:
 
-text
 googleads.g.doubleclick.net
-pagead2.googlesyndication.com  
+pagead2.googlesyndication.com
 adservice.google.com
-Step 2 — Visit any ad-heavy site:
 
-text
+Step 2 — Visit any ad-heavy site:
 http://www.cricbuzz.com/
+
 Step 3 — Observe:
 
 Ads disappear from the page
 
 Logs show:
 
-text
 [proxy] CONNECT to pagead2.googlesyndication.com:443
 [proxy] BLOCKED CONNECT to pagead2.googlesyndication.com (ad)
-✅ HTTPS ads blocked BEFORE TLS handshake
-✅ Normal HTTPS website still loads
-✅ Perfect demo
 
+
+✔ HTTPS ads blocked BEFORE TLS handshake
+✔ Normal HTTPS website still loads
+✔ Perfect demo
+```
 ## ⚠️ Limitations
-HTTPS content itself is not cached or inspected
+```
+1. HTTPS content itself is not cached or inspected
+
 The proxy only tunnels HTTPS without MITM.
 
-Cache works only for HTTP URLs
+2. Cache works only for HTTP URLs
+
 Because HTTPS data is encrypted.
 
-No content rewriting (by design)
+3. No content rewriting (by design)
+
 Proxy blocks entire domains, not partial page elements.
 
-System proxy must be enabled for browser demo
+4. System proxy must be enabled for browser demo
+
 Otherwise browser bypasses the proxy.
+```
+## 🚀 Future Enhancements (Optional)
+```
 
-🚀 Future Enhancements (Optional)
-🔒 Full HTTPS inspection with MITM (certificate installation required)
+Full HTTPS inspection with MITM (certificate installation required)
 
-📊 Auto-update ad-list from public sources (EasyList)
+Auto-update ad-list from public sources (EasyList)
 
-📈 Detailed analytics dashboard
+Detailed analytics dashboard
 
-💾 Cache persistence across restarts
+Cache persistence across restarts
 
-⚡ Rate limiting per client
+Rate limiting per client
 
-🗜️ Compression/Decompression support
-
+Compression/Decompression support
+```
 ## 👨‍💻 Authors
+```
+Mayank Bhatt
+Ankit Bhandari
+Akhil Badoni
+Divyansh Chauhan
+```
+Operating System PBL Project
 
-<div style="background: #e3f2fd; padding: 15px; border-radius: 5px; border-left: 4px solid #2196f3;">
-  <strong>Team Members:</strong><br>
-  • Mayank Bhatt<br>
-  • Ankit Bhandari<br>
-  • Akhil Badoni<br>
-  • Divyansh Chauhan<br>
-  <br>
-  <strong>Operating System PBL Project</strong><br>
-  Multithreaded Proxy Server (Python)
-</div>
-<div align="center" style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;"> <strong>🚀 Ready to experience advanced proxy capabilities!</strong> </div><style> body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; } h1, h2, h3 { color: #2c3e50; } h1 { border-bottom: 3px solid #3498db; padding-bottom: 10px; } h2 { border-left: 4px solid #e74c3c; padding-left: 15px; margin-top: 30px; } code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; } </style>
+Multithreaded Proxy Server (Python)#
