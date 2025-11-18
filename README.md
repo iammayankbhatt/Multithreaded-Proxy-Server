@@ -116,6 +116,7 @@ Upstream/downstream headers (debug)
        └────────────┘
 </pre>
 ## 📦 Folder Structure
+<pre>
 project/
 │
 ├── server.py               # Main proxy server
@@ -126,7 +127,7 @@ project/
 └── data/
     ├── blocked_domains.txt
     └── ad_domains.txt
-
+</pre>
 ## ▶️ Running the Project
 ```
 1. Install dependencies (Python 3.x)
@@ -299,3 +300,4 @@ Divyansh Chauhan
 Operating System PBL Project
 
 Multithreaded Proxy Server (Python)#
+
